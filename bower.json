@@ -1,0 +1,21 @@
+{
+  "name": "todotal",
+  "main": "public/index.html",
+  "version": "0.0.1",
+  "authors": [
+    "Luis Confraria <lconfraria@gmail.com>"
+  ],
+  "description": "Simple test app for toptal",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-sortable": "~0.0.1"
+  }
+}

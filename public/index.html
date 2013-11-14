@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Todotal</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="///oss.maxcdn.com/libs/pure/0.3.0/pure-min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body data-ng-app="app" ng-cloak>
+        <!--[if lt IE 8]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <section class="login pure-g" data-ng-controller="loginCtrl" data-ng-if="!loggedIn">
+            <div class="pure-u-1">
+                <form class="pure-form" name="credentials">
+                    <fieldset class="pure-group">
+                        <input type="email" class="pure-input-1" placeholder="Email" data-ng-model="email" equired>
+                        <input type="password" class="pure-input-1" placeholder="Password" data-ng-model="password" required>
+                    </fieldset>
+                    <div>
+                        <button type="submit" class="pure-button pure-button-primary"  data-ng-click="login(email, password)">Sign in</button>
+                        <a class="pure-button " href="" data-ng-click="register(email, password)">Register</a>
+                        <span class="feedback" data-ng-class="{error:feedbackError}">{{feedback}}</span>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="tasks pure-g" data-ng-controller="tasksCtrl" data-ng-if="loggedIn">
+            <form class="pure-form pure-u-1" data-ng-submit="create(taskNew)">
+                <input type="text" class="pure-u-4-5" data-ng-model="taskNew" style="line-height:25px;">
+                <button class="pure-button pure-button-primary" style="line-height:25px;"><i class="icon-plus"></i></button>
+                <button class="pure-button" style="line-height:25px;" data-ng-click="logout()"><i class="icon-signout"></i></button>
+            </form>
+
+            <div class="empty pure-u-1" data-ng-show="tasks.length == 0">There are no tasks</div>
+
+            <ul class="pure-u-1 task-list" ui-sortable ng-model="tasks">
+                <li data-ng-repeat="task in tasks"  data-ng-class="{done:task.done, hover: task==editing.hover}" class="task" data-ng-mouseenter="editing.hover=task" data-ng-mouseleave="editing.hover=null">
+                    <i class="icon-move pull-left"></i>
+                    <input type="checkbox" data-ng-checked="done(task)" data-ng-click="toggleDone(task)" class="pull-left">
+                    <span data-ng-hide="editing.task==task" data-ng-dblclick="editing.task=task">{{task.task}}</span>
+                    <span data-ng-show="editing.task==task">
+                        <form data-ng-submit="update(task)">
+                            <input type="text" data-ng-model="task.task">
+                            <button style="display:none;"></button>
+                        </form>
+                    </span>
+                    <i class="icon-remove remove" data-ng-click="remove(task)" data-ng-hide="editing.task==task"></i>
+                </li>
+            </ul>
+        </section>
+
+
+
+        <!--[if lte IE 8]>
+            <script src="//oss.maxcdn.com/libs/es5-shim/2.1.0/es5-shim.min.js"></script>
+        <![endif]-->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-cookies.min.js"></script>
+        <script type="text/javascript" src="components/angular-ui-sortable/src/sortable.js"></script>
+        <script src="app/app.js"></script>
+        <script src="app/taskService.js"></script>
+        <script src="app/userService.js"></script>
+        <script src="app/loginCtrl.js"></script>
+        <script src="app/tasksCtrl.js"></script>
+        <script src="app/mainCtrl.js"></script>
+    </body>
+</html>
