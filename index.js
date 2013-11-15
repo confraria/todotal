@@ -94,7 +94,12 @@ app.put('/tasks/:taskId', function (req, res) {
   var task = req.body;
   task.id = parseInt(req.params.taskId,10);
 
-  tasks.owns(task, req.user, function (err, owns) {
+  tasks.owns(task, req.user, function (err, owns, selTask) {
+    if (!selTask) {
+      res.json(404, error('Not found'));
+      return;
+    }
+
     if (!owns) {
       res.json(403, error('Not authorized'));
       return;
@@ -115,7 +120,12 @@ app.delete('/tasks/:taskId', function (req, res) {
   var task = req.body;
   task.id = parseInt(req.params.taskId,10);
 
-  tasks.owns(task, req.user, function (err, owns) {
+  tasks.owns(task, req.user, function (err, owns, selTask) {
+    if (!selTask) {
+      res.json(404, error('Not found'));
+      return;
+    }
+
     if (!owns) {
       res.json(403, error('Not authorized'));
       return;

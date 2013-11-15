@@ -27,7 +27,12 @@ angular.module('app').controller('tasksCtrl', ['$scope', 'task', 'user',
   $scope.update = function (t) {
     $scope.editing.task = undefined;
     if (t.task.trim()) {
-      task.update(t);
+      task.update(t).then(undefined, function (res) {
+        if (res.status == 404) {
+          var ix = $scope.tasks.indexOf(t);
+          $scope.tasks.splice(ix, 1);
+        }
+      });
     }
   };
 
@@ -43,6 +48,8 @@ angular.module('app').controller('tasksCtrl', ['$scope', 'task', 'user',
   $scope.remove = function (t) {
     var ix = $scope.tasks.indexOf(t);
     task.delete(t).then(function () {
+      $scope.tasks.splice(ix, 1);
+    }, function () {
       $scope.tasks.splice(ix, 1);
     });
   };

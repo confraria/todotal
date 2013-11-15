@@ -25,7 +25,11 @@ exports.list = function (filter, callback) {
 exports.owns = function (task, user, callback) {
   var stmt = 'SELECT * FROM tasks WHERE id=$id;';
   _db.get(stmt, {$id: task.id}, function (err, task) {
-    callback(err, task.userId === user.id);
+    if (err) {
+      callback(err);
+      return;
+    }
+    callback(err, task && (task.userId === user.id), task);
   });
 };
 
