@@ -2,8 +2,6 @@ angular.module('app').factory('user', ['$http', '$cookieStore', '$rootScope',
   function ($http, $cookieStore, $rootScope) {
   'use strict';
 
-  console.log($http.defaults.responseInterceptors);
-
   function setToken(t) {
     $http.defaults.headers.common = {token: t};
     $rootScope.loggedIn = true;
@@ -28,7 +26,7 @@ angular.module('app').factory('user', ['$http', '$cookieStore', '$rootScope',
     logout: function () {
       $cookieStore.remove('user');
       $rootScope.loggedIn = false;
-      $http.defaults.headers = {};
+      delete $http.defaults.headers.common.token;
     },
 
     register: function (user, password) {

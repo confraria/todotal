@@ -9,11 +9,13 @@ angular.module('app').controller('tasksCtrl', ['$scope', 'task', 'user',
     if (!t.trim()) {
       return;
     }
-    var _task = {
-      task: t,
-      weight: 0,
-      done: 0
-    };
+
+    var lastTask = $scope.tasks.length ? $scope.tasks[$scope.tasks.length-1] : null,
+      _task = {
+        task: t,
+        weight: lastTask ? lastTask.weight -1 : 0,
+        done: 0
+      };
 
     $scope.tasks.push(_task);
     $scope.taskNew = '';
@@ -60,7 +62,7 @@ angular.module('app').controller('tasksCtrl', ['$scope', 'task', 'user',
     var _weight = Infinity,
       ordered = true;
     tasks.forEach(function (t, ix) {
-      if (t.weight > _weight) {
+      if (t.weight >= _weight) {
         ordered = false;
         return false;
       }
@@ -70,15 +72,17 @@ angular.module('app').controller('tasksCtrl', ['$scope', 'task', 'user',
     if (!ordered) {
       var total = tasks.length;
       tasks.forEach(function (_t, ix) {
+        var oldW = _t.weight;
         _t.weight = total - ix;
-        task.update(_t);
+        if (oldW != _t.weight) {
+          task.update(_t);
+        }
       });
     }
 
   }, true);
 
   $scope.$watch('loggedIn', function (loggedIn) {
-    console.log(loggedIn);
     if (loggedIn) {
       loadTasks();
     }
