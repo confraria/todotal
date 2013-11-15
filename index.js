@@ -80,6 +80,7 @@ app.post('/tasks', function (req, res) {
     task: req.body.task,
     userId: req.user.id
   };
+
   tasks.create(task, function (err, data) {
     if (!err && this.lastID) {
       res.json(201, {id: this.lastID});
@@ -92,25 +93,46 @@ app.post('/tasks', function (req, res) {
 app.put('/tasks/:taskId', function (req, res) {
   var task = req.body;
   task.id = parseInt(req.params.taskId,10);
-  tasks.update(task, function (err, data) {
-    if (!err && this.changes) {
-      res.json(200, ok('Task updated'));
+
+  tasks.owns(task, req.user, function (err, owns) {
+    if (!owns) {
+      res.json(403, error('Not authorized'));
       return;
     }
-    res.json(400, error('An error ocurred'));
+
+    tasks.update(task, function (err, data) {
+      if (!err && this.changes) {
+        res.json(200, ok('Task updated'));
+        return;
+      }
+      res.json(400, error('An error ocurred'));
+    });
   });
+
 });
 
 app.delete('/tasks/:taskId', function (req, res) {
   var task = req.body;
   task.id = parseInt(req.params.taskId,10);
-  tasks.delete(task, function (err, data) {
-    if (!err && this.changes) {
-      res.json(204, ok('Task deleted'));
+
+  tasks.owns(task, req.user, function (err, owns) {
+    if (!owns) {
+      res.json(403, error('Not authorized'));
       return;
     }
-    res.json(404, erro('Task not found'));
+
+    tasks.delete(task, function (err, data) {
+      if (!err && this.changes) {
+        res.json(204, ok('Task deleted'));
+        return;
+      }
+      res.json(404, erro('Task not found'));
+    });
   });
+
 });
 
-app.listen(3000);
+var port = 3000;
+app.listen(port, function () {
+  console.log('Server running at http://localhost:' + port);
+});

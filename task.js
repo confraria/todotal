@@ -22,6 +22,13 @@ exports.list = function (filter, callback) {
   return _db.all(stmt, db.prepareFilter(filter), callback);
 };
 
+exports.owns = function (task, user, callback) {
+  var stmt = 'SELECT userId FROM tasks where id=$id';
+  _db.get(stmt, {id: task.id}, function (err, task) {
+    callback(err, task.userId === user.id);
+  });
+};
+
 exports.create = function (task, callback) {
   var stmt = 'INSERT INTO tasks VALUES (null, $task, 0, 0, $userId);';
   return _db.run(stmt, db.prepareFilter(task), callback);

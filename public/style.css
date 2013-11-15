@@ -60,6 +60,14 @@
 .task .remove:hover {
   opacity: 1;
 }
+
+.task .icon-move {
+  cursor: grab;
+}
+
+.task .icon-move:hover {
+  -webkit-transforms: scale(1.5);;
+}
 .pure-button-error {
   color: white;
   border-radius: 4px;
@@ -77,4 +85,6 @@
   margin: 20px 0;
   background: #EEE;
 }
+
+
 
